@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -32,7 +30,7 @@ public class TweenMainMenu : MonoBehaviour
         PlayButton.transform.localScale = new Vector3(0f, 0f, 0f);
         OptionsButton.transform.localScale = new Vector3(0f, 0f, 0f);
         QuitButton.transform.localScale = new Vector3(0f, 0f, 0f);
-        
+
         volumeSlider.transform.localScale = new Vector3(0f, 0f, 0f);
         vibrToggle.transform.localScale = new Vector3(0f, 0f, 0f);
         backButton.transform.localScale = new Vector3(0f, 0f, 0f);

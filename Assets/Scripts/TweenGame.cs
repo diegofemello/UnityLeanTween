@@ -9,13 +9,13 @@ public class TweenGame : MonoBehaviour
     [SerializeField] TextMeshProUGUI gameText;
 
     [SerializeField] ModalTween modalConfirm;
-    
+
     void Awake()
     {
         quitBtn.transform.localScale = new Vector3(0f, 0f, 0f);
         gameText.transform.localScale = new Vector3(0f, 0f, 0f);
     }
-    
+
     void Start()
     {
         LeanTween.scale(quitBtn.gameObject, new Vector3(1f, 1f, 1f), .5f).setEase(LeanTweenType.easeOutCirc);
@@ -38,7 +38,7 @@ public class TweenGame : MonoBehaviour
     {
         LeanTween.scale(gameText.gameObject, new Vector3(0f, 0f, 0f), .5f).setEase(LeanTweenType.easeOutCirc).setOnComplete(LoadMainMenu);
     }
-    
+
     public void NoButton()
     {
         LeanTween.scale(quitBtn.gameObject, new Vector3(1f, 1f, 1f), .5f).setDelay(.7f).setEase(LeanTweenType.easeOutCirc);

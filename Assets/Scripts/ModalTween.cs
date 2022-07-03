@@ -9,11 +9,11 @@ public class ModalTween : MonoBehaviour
     Button yesBtn, noBtn;
 
     [SerializeField]
-    TextMeshProUGUI  description;
+    TextMeshProUGUI description;
 
     [HideInInspector]
     public Action yesAction, noAction;
-    
+
     void Awake()
     {
         transform.localScale = new Vector3(0f, 0f, 0f);
