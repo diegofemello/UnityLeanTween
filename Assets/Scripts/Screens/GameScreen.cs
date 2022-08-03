@@ -1,9 +1,8 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class TweenGame : MonoBehaviour
+public class GameScreen : MonoBehaviour
 {
     [SerializeField] Button quitBtn;
     [SerializeField] TextMeshProUGUI gameText;
@@ -22,6 +21,7 @@ public class TweenGame : MonoBehaviour
         LeanTween.scale(gameText.gameObject, new Vector3(1f, 1f, 1f), .5f).setEase(LeanTweenType.easeOutCirc);
     }
 
+    
     public void QuitButton()
     {
         var panelTest = Instantiate(modalConfirm, parent: transform).GetComponent<ModalTween>();
@@ -46,6 +46,6 @@ public class TweenGame : MonoBehaviour
 
     void LoadMainMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        LoadingManager.Instance.NextLevel(EnumScenes.MainMenu);
     }
 }

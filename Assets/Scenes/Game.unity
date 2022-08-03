@@ -525,7 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   quitBtn: {fileID: 228720614}
   gameText: {fileID: 1713667781}
-  modalConfirm: {fileID: 7342231642439317142, guid: c01775e8f79a25d4aad58de23b0c5def, type: 3}
+  modalConfirm: {fileID: 7342231642439317142, guid: 88d4c645597a4c8479c062836ebc8a1c, type: 3}
 --- !u!1 &1692564460
 GameObject:
   m_ObjectHideFlags: 0

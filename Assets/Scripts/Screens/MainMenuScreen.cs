@@ -1,9 +1,8 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class TweenMainMenu : MonoBehaviour
+public class MainMenuScreen : MonoBehaviour
 {
 
     [SerializeField]
@@ -19,7 +18,7 @@ public class TweenMainMenu : MonoBehaviour
     Toggle vibrToggle;
 
     [SerializeField]
-    GameObject BackPanel, playObjects, optionsObjects, loginObjects;
+    GameObject playObjects, optionsObjects, loginObjects;
 
 
     void Awake()
@@ -34,7 +33,7 @@ public class TweenMainMenu : MonoBehaviour
         volumeSlider.transform.localScale = new Vector3(0f, 0f, 0f);
         vibrToggle.transform.localScale = new Vector3(0f, 0f, 0f);
         backButton.transform.localScale = new Vector3(0f, 0f, 0f);
-        BackPanel.transform.localScale = new Vector3(0f, 0f, 0f);
+        gameObject.transform.localScale = new Vector3(0f, 0f, 0f);
 
         username.transform.localScale = new Vector3(0f, 0f, 0f);
         password.transform.localScale = new Vector3(0f, 0f, 0f);
@@ -43,9 +42,21 @@ public class TweenMainMenu : MonoBehaviour
 
         StartTween();
     }
-    public void Play()
+
+    public async void Play()
     {
-        PlayTween();
+        Auth logged = await RequestManager.Instance.Login(username.text, password.text);
+
+        if (logged != null)
+        {
+            GameManager.Instance.user = logged.user;
+            PlayTween();
+        }
+        else
+        {
+            LoadingManager.Instance.ShowError("Não foi possível logar");
+        }
+
     }
 
 
@@ -55,8 +66,20 @@ public class TweenMainMenu : MonoBehaviour
         OptionsTween();
     }
 
-    public void Login()
+    public async void Login()
     {
+        if (!string.IsNullOrEmpty(RequestManager.Instance.bearer))
+        {
+            User user = await RequestManager.Instance.GetUser();
+
+            if (user != null)
+            {
+                GameManager.Instance.user = user;
+                PlayTween();
+                return;
+            }
+        }
+
         loginObjects.SetActive(true);
         LoginTween();
     }
@@ -78,8 +101,6 @@ public class TweenMainMenu : MonoBehaviour
         LeanTween.scale(OptionsButton.gameObject, new Vector3(1f, 1f, 1f), 0.7f).setDelay(.7f).setEase(LeanTweenType.easeOutCirc);
         LeanTween.scale(QuitButton.gameObject, new Vector3(1f, 1f, 1f), 0.7f).setDelay(.8f).setEase(LeanTweenType.easeOutCirc)
         .setOnComplete(OptionsActivateFalse);
-
-
     }
 
     void OptionsActivateFalse()
@@ -95,16 +116,17 @@ public class TweenMainMenu : MonoBehaviour
     public void MainMenu()
     {
         PlayTween();
-        SceneManager.LoadScene("Main Menu");
+        LoadingManager.Instance.NextLevel(EnumScenes.MainMenu);
 
     }
 
     void PlayTween()
     {
+
         LeanTween.scale(PlayButton.gameObject, new Vector3(0f, 0f, 0f), 0.6f).setEase(LeanTweenType.easeInQuart);
         LeanTween.scale(OptionsButton.gameObject, new Vector3(0f, 0f, 0f), 0.6f).setDelay(.1f).setEase(LeanTweenType.easeInQuart);
         LeanTween.scale(QuitButton.gameObject, new Vector3(0f, 0f, 0f), 0.6f).setDelay(.2f).setEase(LeanTweenType.easeInQuart);
-        LeanTween.scale(BackPanel, new Vector3(0f, 0f, 0f), 0.6f).setDelay(.3f).setEase(LeanTweenType.easeInQuart)
+        LeanTween.scale(gameObject, new Vector3(0f, 0f, 0f), 0.6f).setDelay(.3f).setEase(LeanTweenType.easeInQuart)
         .setOnComplete(LoadGame);
 
     }
@@ -152,11 +174,11 @@ public class TweenMainMenu : MonoBehaviour
         LeanTween.scale(QuitButton.gameObject, new Vector3(0f, 0f, 0f), 0.3f);
         LeanTween.scale(OptionsButton.gameObject, new Vector3(0f, 0f, 0f), 0.3f).setDelay(.1f);
         LeanTween.scale(PlayButton.gameObject, new Vector3(0f, 0f, 0f), 0.3f).setDelay(.2f);
-        LeanTween.scale(BackPanel, new Vector3(0f, 0f, 0f), 0.3f).setDelay(.3f).setOnComplete(QuitGame);
+        LeanTween.scale(gameObject, new Vector3(0f, 0f, 0f), 0.3f).setDelay(.3f).setOnComplete(QuitGame);
     }
     void StartTween()
     {
-        LeanTween.scale(BackPanel, new Vector3(1f, 1f, 1f), 0.9f).setDelay(.3f).setEase(LeanTweenType.easeOutCirc);
+        LeanTween.scale(gameObject, new Vector3(1f, 1f, 1f), 0.9f).setDelay(.3f).setEase(LeanTweenType.easeOutCirc);
         LeanTween.scale(PlayButton.gameObject, new Vector3(1f, 1f, 1f), 0.7f).setDelay(.6f).setEase(LeanTweenType.easeOutCirc);
         LeanTween.scale(OptionsButton.gameObject, new Vector3(1f, 1f, 1f), 0.7f).setDelay(.7f).setEase(LeanTweenType.easeOutCirc);
         LeanTween.scale(QuitButton.gameObject, new Vector3(1f, 1f, 1f), 0.7f).setDelay(.8f).setEase(LeanTweenType.easeOutCirc);
@@ -165,7 +187,7 @@ public class TweenMainMenu : MonoBehaviour
 
     void LoadGame()
     {
-        SceneManager.LoadScene("Game");
+        LoadingManager.Instance.NextLevel(EnumScenes.Game);
     }
 
     void QuitGame()
